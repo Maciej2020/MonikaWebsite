@@ -1413,10 +1413,10 @@ picture {
     grid-template-columns: repeat(4, 1fr);
   }
 
-  /* Kraków zajmuje pełną szerokość, a Gliwice, Dębica i Bochnia
+  /* Kraków zajmuje pełną szerokość, a Dębica i Bochnia
      układają się w jednym rzędzie pod spodem. Siatka ma 4 kolumny z tym
      samym odstępem co karty Krakowa, więc kafelki miast mają identyczny
-     rozmiar jak kafelki Krakowa (czwarta kolumna pozostaje pusta). */
+     rozmiar jak kafelki Krakowa (pozostałe kolumny pozostają puste). */
   .locations-groups {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
