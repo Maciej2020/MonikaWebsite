@@ -6,6 +6,12 @@
    Pliki WOFF2 są przechowywane w katalogu assets/fonts. Skrypt do ich
    ponownego pobrania znajduje się poza paczką produkcyjną, w narzedzia/.
    Fonty zapasowe są zdefiniowane w assets/css/main.css.
+
+   UWAGA — pliki są SUBSETOWANE do zakresu polskiego (2026-10-05):
+   ASCII + Latin-1 + polskie znaki (małe ORAZ wielkie, bo interfejs
+   używa text-transform: uppercase) + typografia i symbole (★ ‹ › …).
+   Razem 245 znaków, 135 KB -> 77 KB. Przy dodawaniu treści w innym
+   języku trzeba wygenerować subsety na nowo z pełnych plików.
    ============================================================ */
 
 @font-face {
@@ -56,4 +62,48 @@
   font-weight: 500;
   font-display: swap;
   src: url("../fonts/jost-500.woff2") format("woff2");
+}
+
+/* ============================================================
+   Kroje zastępcze z dopasowanymi metrykami.
+
+   Zanim webfont się wczyta, tekst rysowany jest krojem systemowym.
+   Jeśli ma inną szerokość znaku i inne metryki pionowe, po podmianie
+   akapity przelewają się na nowo — to był jedyny powód niezerowego
+   CLS na tej stronie (0,022-0,027 na /umow-wizyte i /polityka-prywatnosci).
+
+   Wartości wyliczone pomiarem: size-adjust to stosunek szerokości tej
+   samej próbki tekstu w webfoncie i w kroju zastępczym, a ascent/descent
+   to metryki webfontu podzielone przez size-adjust.
+
+   local() bez url() oznacza: użyj kroju z systemu, nic nie pobieraj.
+   Gdy go nie ma (np. Android), reguła jest pomijana i stos leci dalej.
+   ============================================================ */
+
+/* Cormorant Garamond: ascent 92,40% / descent 28,70% / lineGap 0
+   wzgledem Georgii: 3816,6 / 4355,6 = 87,62% */
+@font-face {
+  font-family: "Cormorant Fallback";
+  src:
+    local("Georgia"),
+    local("Times New Roman"),
+    local("Times");
+  size-adjust: 87.62%;
+  ascent-override: 105.46%;
+  descent-override: 32.76%;
+  line-gap-override: 0%;
+}
+
+/* Jost: ascent 107,00% / descent 37,50% / lineGap 0
+   wzgledem Arial/Helvetiki: 4183,7 / 4408,1 = 94,91% */
+@font-face {
+  font-family: "Jost Fallback";
+  src:
+    local("Arial"),
+    local("Helvetica Neue"),
+    local("Helvetica");
+  size-adjust: 94.91%;
+  ascent-override: 112.74%;
+  descent-override: 39.51%;
+  line-gap-override: 0%;
 }

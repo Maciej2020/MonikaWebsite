@@ -80,6 +80,172 @@
     }
     initCertsCarousel();
     initReviewsCarousel();
+    initGalleryLightbox();
+  }
+
+  // Powiększony podgląd zdjęcia "przed/po" w galerii.
+  //
+  // Korzysta z tej samej warstwy stylów co podgląd certyfikatów
+  // (.media-modal w main.css) i z tego samego natywnego <dialog>, ale ma
+  // własne atrybuty data-*, bo galeria nie jest karuzelą — nie ma tu
+  // autoodtwarzania ani Splide, więc logika jest prostsza.
+  //
+  // Gdy przeglądarka nie zna <dialog> (showModal), funkcja po prostu nic nie
+  // robi: zdjęcia zostają zwykłymi kadrami w siatce, strona działa dalej.
+  function initGalleryLightbox() {
+    var gallery = document.querySelector(".gallery");
+    var modal = document.querySelector("[data-gallery-modal]");
+    if (!gallery || !modal || typeof modal.showModal !== "function") return;
+
+    var modalImg = modal.querySelector("[data-gallery-modal-img]");
+    var modalCap = modal.querySelector("[data-gallery-modal-cap]");
+    var modalClose = modal.querySelector("[data-gallery-modal-close]");
+    var modalPrev = modal.querySelector("[data-gallery-modal-prev]");
+    var modalNext = modal.querySelector("[data-gallery-modal-next]");
+    var modalThumbs = modal.querySelector("[data-gallery-modal-thumbs]");
+    if (!modalImg || !modalClose) return;
+
+    var triggers = Array.prototype.slice.call(
+      gallery.querySelectorAll("[data-gallery-trigger]"),
+    );
+    if (!triggers.length) return;
+
+    var shots = triggers.map(function (trigger) {
+      var thumbImg = trigger.querySelector("img");
+      return {
+        fullSrc: trigger.getAttribute("data-full-src") || "",
+        // Do paska miniaturek bierzemy ten sam mały plik, który siatka już
+        // pobrała, zamiast dużego podglądu — pasek nie generuje transferu.
+        thumbSrc: thumbImg ? thumbImg.currentSrc || thumbImg.src : "",
+        title: trigger.getAttribute("data-gallery-title") || "",
+        note: trigger.getAttribute("data-gallery-note") || "",
+      };
+    });
+
+    var currentIndex = 0;
+    // Element, z którego otwarto podgląd — po zamknięciu wraca na niego fokus,
+    // żeby nawigacja klawiaturą nie zaczynała od początku strony.
+    var lastTrigger = null;
+
+    var thumbButtons = [];
+    var ensureThumbs = function () {
+      if (!modalThumbs || thumbButtons.length) return;
+      shots.forEach(function (shot, i) {
+        var item = document.createElement("li");
+        item.className = "media-modal__thumb-item";
+
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "media-modal__thumb";
+        btn.setAttribute("data-gallery-modal-thumb", "");
+        btn.setAttribute("data-index", String(i));
+        btn.setAttribute("aria-label", shot.title || "Zdjęcie " + (i + 1));
+
+        var img = document.createElement("img");
+        img.src = shot.thumbSrc;
+        img.alt = "";
+        img.width = 68;
+        img.height = 48;
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        btn.appendChild(img);
+        item.appendChild(btn);
+        modalThumbs.appendChild(item);
+      });
+      thumbButtons = Array.prototype.slice.call(
+        modalThumbs.querySelectorAll("[data-gallery-modal-thumb]"),
+      );
+    };
+
+    var showAt = function (index) {
+      currentIndex = (index + shots.length) % shots.length;
+      var shot = shots[currentIndex];
+      if (!shot) return;
+      modalImg.src = shot.fullSrc;
+      modalImg.alt = shot.title
+        ? "Powiększone zdjęcie: " + shot.title + " - efekt przed i po"
+        : "Powiększone zdjęcie efektu zabiegu";
+      if (modalCap) {
+        modalCap.textContent = shot.title;
+        if (shot.note) {
+          var note = document.createElement("span");
+          note.className = "media-modal__cap-note";
+          note.textContent = shot.note;
+          modalCap.appendChild(note);
+        }
+      }
+      thumbButtons.forEach(function (btn, i) {
+        var isActive = i === currentIndex;
+        btn.classList.toggle("is-active", isActive);
+        if (isActive) {
+          btn.setAttribute("aria-current", "true");
+          if (modal.open) {
+            btn.scrollIntoView({ block: "nearest", inline: "center" });
+          }
+        } else {
+          btn.removeAttribute("aria-current");
+        }
+      });
+    };
+
+    gallery.addEventListener("click", function (event) {
+      var trigger = event.target.closest("[data-gallery-trigger]");
+      if (!trigger) return;
+      lastTrigger = trigger;
+      ensureThumbs();
+      modal.showModal();
+      showAt(triggers.indexOf(trigger));
+    });
+
+    if (modalThumbs) {
+      modalThumbs.addEventListener("click", function (event) {
+        var btn = event.target.closest("[data-gallery-modal-thumb]");
+        if (!btn) return;
+        showAt(parseInt(btn.getAttribute("data-index"), 10) || 0);
+      });
+    }
+
+    if (modalPrev) {
+      modalPrev.addEventListener("click", function () {
+        showAt(currentIndex - 1);
+      });
+    }
+    if (modalNext) {
+      modalNext.addEventListener("click", function () {
+        showAt(currentIndex + 1);
+      });
+    }
+
+    // Strzałki przełączają zdjęcia niezależnie od tego, który element wewnątrz
+    // okna ma fokus — stąd nasłuch na "document", a nie na samym <dialog>.
+    // Escape obsługuje natywnie <dialog>, więc nie trzeba go przechwytywać.
+    document.addEventListener("keydown", function (event) {
+      if (!modal.open) return;
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showAt(currentIndex + 1);
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showAt(currentIndex - 1);
+      }
+    });
+
+    modalClose.addEventListener("click", function () {
+      modal.close();
+    });
+
+    // Klik w tło zamyka podgląd. Porównanie event.target z samym <dialog>
+    // odróżnia tło od treści okna i — w odróżnieniu od sprawdzania
+    // współrzędnych kursora — nie zamyka okna przy aktywacji przycisku
+    // klawiaturą (Enter/Spacja zgłaszają "click" ze współrzędnymi 0,0).
+    modal.addEventListener("click", function (event) {
+      if (event.target === modal) modal.close();
+    });
+
+    modal.addEventListener("close", function () {
+      if (lastTrigger) lastTrigger.focus();
+    });
   }
 
   // Karuzela opinii pacjentów na stronie głównej: Splide, pętla i autoplay z

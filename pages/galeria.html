@@ -29,14 +29,14 @@
     />
     <meta
       property="og:image"
-      content="https://drmonikabazgier.pl/assets/images/about/about-photo.jpg"
+      content="https://drmonikabazgier.pl/assets/images/og/og-image.jpg"
     />
     <meta
       property="og:image:alt"
-      content="Monika Bazgier - lekarz medycyny estetycznej"
+      content="lek. Monika Bazgier - medycyna estetyczna: Kraków, Dębica, Bochnia"
     />
-    <meta property="og:image:width" content="1536" />
-    <meta property="og:image:height" content="2048" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
@@ -48,14 +48,21 @@
     />
     <meta
       name="twitter:image"
-      content="https://drmonikabazgier.pl/assets/images/about/about-photo.jpg"
+      content="https://drmonikabazgier.pl/assets/images/og/og-image.jpg"
     />
-    <link rel="stylesheet" href="/assets/css/fonts.css?v=2026-08-27-3" />
-    <link rel="stylesheet" href="/assets/css/main.css?v=2026-10-05-6" />
+    <link rel="stylesheet" href="/assets/css/fonts.css?v=2026-10-05-7" />
+    <link rel="stylesheet" href="/assets/css/main.css?v=2026-10-05-7" />
     <link
       rel="preload"
       as="image"
-      href="/assets/images/gallery/gallery-01.webp"
+      href="/assets/images/gallery/gallery-01-620.webp"
+      imagesrcset="
+        /assets/images/gallery/gallery-01-420.webp   420w,
+        /assets/images/gallery/gallery-01-620.webp   620w,
+        /assets/images/gallery/gallery-01-900.webp   900w,
+        /assets/images/gallery/gallery-01-1080.webp 1080w
+      "
+      imagesizes="(min-width: 1160px) 550px, (min-width: 720px) 45vw, 90vw"
       type="image/webp"
       fetchpriority="high"
     />
@@ -156,20 +163,36 @@
 
           <div class="gallery">
             <figure class="gallery__item">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="/assets/images/gallery/gallery-01.webp"
-                />
-                <img
-                  src="/assets/images/gallery/gallery-01.jpg"
-                  alt="Korekcja uśmiechu dziąsłowego toksyną botulinową - efekt przed i po"
-                  width="1080"
-                  height="1350"
-                  fetchpriority="high"
-                  decoding="async"
-                />
-              </picture>
+              <button
+                class="gallery__trigger"
+                type="button"
+                data-gallery-trigger
+                data-full-src="/assets/images/gallery/gallery-01-full.webp"
+                data-gallery-title="Korekcja uśmiechu dziąsłowego toksyną botulinową"
+                data-gallery-note="góra: przed; dół: po"
+                aria-label="Powiększ zdjęcie: Korekcja uśmiechu dziąsłowego toksyną botulinową"
+              >
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset="
+                      /assets/images/gallery/gallery-01-420.webp   420w,
+                      /assets/images/gallery/gallery-01-620.webp   620w,
+                      /assets/images/gallery/gallery-01-900.webp   900w,
+                      /assets/images/gallery/gallery-01-1080.webp 1080w
+                    "
+                    sizes="(min-width: 1160px) 550px, (min-width: 720px) 45vw, 90vw"
+                  />
+                  <img
+                    src="/assets/images/gallery/gallery-01.jpg"
+                    alt="Korekcja uśmiechu dziąsłowego toksyną botulinową - efekt przed i po"
+                    width="1080"
+                    height="1350"
+                    fetchpriority="high"
+                    decoding="async"
+                  />
+                </picture>
+              </button>
               <figcaption class="gallery__cap">
                 Korekcja uśmiechu dziąsłowego toksyną botulinową
                 <span class="gallery__note">góra: przed; dół: po</span>
@@ -177,20 +200,36 @@
             </figure>
 
             <figure class="gallery__item">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="/assets/images/gallery/gallery-02.webp"
-                />
-                <img
-                  src="/assets/images/gallery/gallery-02.jpg"
-                  alt="Modelowanie ust kwasem hialuronowym - efekt przed i po"
-                  width="1080"
-                  height="1350"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
+              <button
+                class="gallery__trigger"
+                type="button"
+                data-gallery-trigger
+                data-full-src="/assets/images/gallery/gallery-02-full.webp"
+                data-gallery-title="Modelowanie ust kwasem hialuronowym"
+                data-gallery-note="góra: przed; dół: po"
+                aria-label="Powiększ zdjęcie: Modelowanie ust kwasem hialuronowym"
+              >
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset="
+                      /assets/images/gallery/gallery-02-420.webp   420w,
+                      /assets/images/gallery/gallery-02-620.webp   620w,
+                      /assets/images/gallery/gallery-02-900.webp   900w,
+                      /assets/images/gallery/gallery-02-1080.webp 1080w
+                    "
+                    sizes="(min-width: 1160px) 550px, (min-width: 720px) 45vw, 90vw"
+                  />
+                  <img
+                    src="/assets/images/gallery/gallery-02.jpg"
+                    alt="Modelowanie ust kwasem hialuronowym - efekt przed i po"
+                    width="1080"
+                    height="1350"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+              </button>
               <figcaption class="gallery__cap">
                 Modelowanie ust kwasem hialuronowym
                 <span class="gallery__note">góra: przed; dół: po</span>
@@ -198,20 +237,36 @@
             </figure>
 
             <figure class="gallery__item">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="/assets/images/gallery/gallery-03.webp"
-                />
-                <img
-                  src="/assets/images/gallery/gallery-03.jpg"
-                  alt="Modelowanie brody - efekt przed i po"
-                  width="1080"
-                  height="1350"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
+              <button
+                class="gallery__trigger"
+                type="button"
+                data-gallery-trigger
+                data-full-src="/assets/images/gallery/gallery-03-full.webp"
+                data-gallery-title="Modelowanie brody"
+                data-gallery-note="góra: przed; dół: po"
+                aria-label="Powiększ zdjęcie: Modelowanie brody"
+              >
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset="
+                      /assets/images/gallery/gallery-03-420.webp   420w,
+                      /assets/images/gallery/gallery-03-620.webp   620w,
+                      /assets/images/gallery/gallery-03-900.webp   900w,
+                      /assets/images/gallery/gallery-03-1080.webp 1080w
+                    "
+                    sizes="(min-width: 1160px) 550px, (min-width: 720px) 45vw, 90vw"
+                  />
+                  <img
+                    src="/assets/images/gallery/gallery-03.jpg"
+                    alt="Modelowanie brody - efekt przed i po"
+                    width="1080"
+                    height="1350"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+              </button>
               <figcaption class="gallery__cap">
                 Modelowanie brody
                 <span class="gallery__note">góra: przed; dół: po</span>
@@ -219,20 +274,36 @@
             </figure>
 
             <figure class="gallery__item">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="/assets/images/gallery/gallery-04.webp"
-                />
-                <img
-                  src="/assets/images/gallery/gallery-04.jpg"
-                  alt="Korekcja zmarszczek toksyną botulinową - efekt przed i po"
-                  width="1638"
-                  height="2048"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
+              <button
+                class="gallery__trigger"
+                type="button"
+                data-gallery-trigger
+                data-full-src="/assets/images/gallery/gallery-04-full.webp"
+                data-gallery-title="Korekcja zmarszczek toksyną botulinową"
+                data-gallery-note="lewa: przed; prawa: po"
+                aria-label="Powiększ zdjęcie: Korekcja zmarszczek toksyną botulinową"
+              >
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset="
+                      /assets/images/gallery/gallery-04-420.webp   420w,
+                      /assets/images/gallery/gallery-04-620.webp   620w,
+                      /assets/images/gallery/gallery-04-900.webp   900w,
+                      /assets/images/gallery/gallery-04-1080.webp 1080w
+                    "
+                    sizes="(min-width: 1160px) 550px, (min-width: 720px) 45vw, 90vw"
+                  />
+                  <img
+                    src="/assets/images/gallery/gallery-04.jpg"
+                    alt="Korekcja zmarszczek toksyną botulinową - efekt przed i po"
+                    width="1638"
+                    height="2048"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+              </button>
               <figcaption class="gallery__cap">
                 Korekcja zmarszczek toksyną botulinową
                 <span class="gallery__note">lewa: przed; prawa: po</span>
@@ -240,20 +311,36 @@
             </figure>
 
             <figure class="gallery__item">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="/assets/images/gallery/gallery-05.webp"
-                />
-                <img
-                  src="/assets/images/gallery/gallery-05.jpg"
-                  alt="Modelowanie twarzy - efekt przed i po"
-                  width="1080"
-                  height="1350"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
+              <button
+                class="gallery__trigger"
+                type="button"
+                data-gallery-trigger
+                data-full-src="/assets/images/gallery/gallery-05-full.webp"
+                data-gallery-title="Modelowanie twarzy"
+                data-gallery-note="lewa: przed; prawa: po"
+                aria-label="Powiększ zdjęcie: Modelowanie twarzy"
+              >
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset="
+                      /assets/images/gallery/gallery-05-420.webp   420w,
+                      /assets/images/gallery/gallery-05-620.webp   620w,
+                      /assets/images/gallery/gallery-05-900.webp   900w,
+                      /assets/images/gallery/gallery-05-1080.webp 1080w
+                    "
+                    sizes="(min-width: 1160px) 550px, (min-width: 720px) 45vw, 90vw"
+                  />
+                  <img
+                    src="/assets/images/gallery/gallery-05.jpg"
+                    alt="Modelowanie twarzy - efekt przed i po"
+                    width="1080"
+                    height="1350"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+              </button>
               <figcaption class="gallery__cap">
                 Modelowanie twarzy
                 <span class="gallery__note">lewa: przed; prawa: po</span>
@@ -261,20 +348,36 @@
             </figure>
 
             <figure class="gallery__item">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="/assets/images/gallery/gallery-06.webp"
-                />
-                <img
-                  src="/assets/images/gallery/gallery-06.jpg"
-                  alt="Modelowanie ust i brody - efekt przed i po"
-                  width="1080"
-                  height="1350"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
+              <button
+                class="gallery__trigger"
+                type="button"
+                data-gallery-trigger
+                data-full-src="/assets/images/gallery/gallery-06-full.webp"
+                data-gallery-title="Modelowanie ust i brody"
+                data-gallery-note="góra: przed; dół: po"
+                aria-label="Powiększ zdjęcie: Modelowanie ust i brody"
+              >
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset="
+                      /assets/images/gallery/gallery-06-420.webp   420w,
+                      /assets/images/gallery/gallery-06-620.webp   620w,
+                      /assets/images/gallery/gallery-06-900.webp   900w,
+                      /assets/images/gallery/gallery-06-1080.webp 1080w
+                    "
+                    sizes="(min-width: 1160px) 550px, (min-width: 720px) 45vw, 90vw"
+                  />
+                  <img
+                    src="/assets/images/gallery/gallery-06.jpg"
+                    alt="Modelowanie ust i brody - efekt przed i po"
+                    width="1080"
+                    height="1350"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+              </button>
               <figcaption class="gallery__cap">
                 Modelowanie ust i brody
                 <span class="gallery__note">góra: przed; dół: po</span>
@@ -282,20 +385,36 @@
             </figure>
 
             <figure class="gallery__item">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="/assets/images/gallery/gallery-07.webp"
-                />
-                <img
-                  src="/assets/images/gallery/gallery-07.jpg"
-                  alt="Korekcja zmarszczek toksyną botulinową - efekt przed i po"
-                  width="1080"
-                  height="1350"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
+              <button
+                class="gallery__trigger"
+                type="button"
+                data-gallery-trigger
+                data-full-src="/assets/images/gallery/gallery-07-full.webp"
+                data-gallery-title="Korekcja zmarszczek toksyną botulinową"
+                data-gallery-note="góra: przed; dół: po"
+                aria-label="Powiększ zdjęcie: Korekcja zmarszczek toksyną botulinową"
+              >
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset="
+                      /assets/images/gallery/gallery-07-420.webp   420w,
+                      /assets/images/gallery/gallery-07-620.webp   620w,
+                      /assets/images/gallery/gallery-07-900.webp   900w,
+                      /assets/images/gallery/gallery-07-1080.webp 1080w
+                    "
+                    sizes="(min-width: 1160px) 550px, (min-width: 720px) 45vw, 90vw"
+                  />
+                  <img
+                    src="/assets/images/gallery/gallery-07.jpg"
+                    alt="Korekcja zmarszczek toksyną botulinową - efekt przed i po"
+                    width="1080"
+                    height="1350"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+              </button>
               <figcaption class="gallery__cap">
                 Korekcja zmarszczek toksyną botulinową
                 <span class="gallery__note">góra: przed; dół: po</span>
@@ -314,6 +433,41 @@
           </div>
         </div>
       </section>
+
+      <dialog class="media-modal" data-gallery-modal aria-label="Powiększone zdjęcie efektu zabiegu">
+        <button
+          type="button"
+          class="media-modal__close"
+          data-gallery-modal-close
+          aria-label="Zamknij powiększone zdjęcie"
+        >
+          ×
+        </button>
+
+        <div class="media-modal__viewer">
+          <button
+            type="button"
+            class="media-modal__nav media-modal__nav--prev"
+            data-gallery-modal-prev
+            aria-label="Poprzednie zdjęcie"
+          >
+            ‹
+          </button>
+          <img class="media-modal__img" data-gallery-modal-img alt="" decoding="async" />
+          <button
+            type="button"
+            class="media-modal__nav media-modal__nav--next"
+            data-gallery-modal-next
+            aria-label="Następne zdjęcie"
+          >
+            ›
+          </button>
+        </div>
+
+        <p class="media-modal__cap" data-gallery-modal-cap></p>
+
+        <ul class="media-modal__thumbs" data-gallery-modal-thumbs aria-label="Wybierz zdjęcie"></ul>
+      </dialog>
     </main>
 
     <footer class="site-footer">
@@ -371,6 +525,6 @@
       </p>
     </footer>
 
-    <script src="/assets/js/app.js?v=2026-08-27-5" defer></script>
+    <script src="/assets/js/app.js?v=2026-10-05-7" defer></script>
   </body>
 </html>
