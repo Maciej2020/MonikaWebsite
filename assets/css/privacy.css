@@ -1,0 +1,47 @@
+/* Układ treści prawnej. Ładowany wyłącznie na stronie polityki prywatności. */
+.legal {
+  max-width: 760px;
+  margin-inline: auto;
+  margin-top: 32px;
+}
+
+.legal h2 {
+  margin: 2em 0 0.5em;
+  font-family: var(--serif);
+  font-size: clamp(1.35rem, 3.5vw, 1.9rem);
+  line-height: 1.2;
+}
+
+.legal h2:first-child {
+  margin-top: 0;
+}
+
+.legal p {
+  margin: 0 0 1em;
+  line-height: 1.75;
+}
+
+.legal ul {
+  margin: 0 0 1em;
+  padding-left: 1.3em;
+}
+
+.legal li {
+  margin: 0 0 0.5em;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.legal a {
+  color: var(--ink);
+}
+
+.legal__meta {
+  margin-top: 2.25em;
+  font-style: italic;
+}
+
+.legal__note {
+  margin-top: 0.75em;
+  font-style: italic;
+}
