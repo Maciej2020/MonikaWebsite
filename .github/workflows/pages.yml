@@ -1,0 +1,54 @@
+name: Deploy website to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build static site
+        shell: bash
+        run: |
+          set -euo pipefail
+          repo="${GITHUB_REPOSITORY##*/}"
+          mkdir -p _site
+          cp -R assets _site/assets
+          cp robots.txt sitemap.xml _site/
+          cp pages/index.html _site/index.html
+          cp pages/404.html _site/404.html
+
+          for page in o-mnie zabiegi galeria umow-wizyte polityka-prywatnosci; do
+            mkdir -p "_site/$page"
+            cp "pages/$page.html" "_site/$page/index.html"
+          done
+
+          find _site -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.xml' \) -exec sed -i "s#\([\"'=(]\)/assets/#\1/${repo}/assets/#g; s#\([\"'=(]\)/o-mnie#\1/${repo}/o-mnie#g; s#\([\"'=(]\)/zabiegi#\1/${repo}/zabiegi#g; s#\([\"'=(]\)/galeria#\1/${repo}/galeria#g; s#\([\"'=(]\)/umow-wizyte#\1/${repo}/umow-wizyte#g; s#\([\"'=(]\)/polityka-prywatnosci#\1/${repo}/polityka-prywatnosci#g" {} +
+          touch _site/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
