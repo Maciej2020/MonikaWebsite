@@ -1,0 +1,19 @@
+# Pliki systemowe macOS. Trafialy do repozytorium, a stamtad przez
+# `cp -R assets` na serwer — /assets/.DS_Store byl publicznie dostepny
+# i ujawnial nazwy katalogow.
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Edytory
+.vscode/
+.idea/
+*.swp
+
+# Katalog budowania GitHub Pages (powstaje w workflow, nie w repo)
+_site/

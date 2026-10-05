@@ -30,20 +30,59 @@ jobs:
         run: |
           set -euo pipefail
           repo="${GITHUB_REPOSITORY##*/}"
+          pages=(o-mnie zabiegi galeria umow-wizyte polityka-prywatnosci)
+
           mkdir -p _site
           cp -R assets _site/assets
           cp robots.txt sitemap.xml _site/
           cp pages/index.html _site/index.html
           cp pages/404.html _site/404.html
 
-          for page in o-mnie zabiegi galeria umow-wizyte polityka-prywatnosci; do
+          # CNAME musi trafic do artefaktu, inaczej GitHub Pages nie podepnie
+          # wlasnej domeny — sam plik w repozytorium nie wystarczy.
+          if [ -f CNAME ]; then
+            cp CNAME _site/
+          fi
+
+          for page in "${pages[@]}"; do
             mkdir -p "_site/$page"
             cp "pages/$page.html" "_site/$page/index.html"
           done
 
-          # Pierwsze wyrazenie łapie sciezki tuz po cudzyslowie/= /(, drugie —
-          # kolejne URL-e w wielolinijkowym srcset, ktore zaczynaja wlasna linie.
-          find _site -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.xml' \) -exec sed -i "s#href=\"/\"#href=\"/${repo}/\"#g; s#href='/'#href='/${repo}/'#g; s#\([\"'=(]\)/assets/#\1/${repo}/assets/#g; s#^\([[:space:]]*\)/assets/#\1/${repo}/assets/#g; s#\([\"'=(]\)/o-mnie#\1/${repo}/o-mnie#g; s#\([\"'=(]\)/zabiegi#\1/${repo}/zabiegi#g; s#\([\"'=(]\)/galeria#\1/${repo}/galeria#g; s#\([\"'=(]\)/umow-wizyte#\1/${repo}/umow-wizyte#g; s#\([\"'=(]\)/polityka-prywatnosci#\1/${repo}/polityka-prywatnosci#g" {} +
+          # Pliki systemowe macOS nie moga trafic na serwer — ujawniaja nazwy
+          # katalogow. Do repozytorium nie wpuszcza ich .gitignore, ale kopia
+          # robocza moze je miec, a `cp -R assets` kopiuje rekurencyjnie.
+          find _site -name '.DS_Store' -delete
+
+          # Przepisanie sciezek bezwzglednych na podkatalog /<repo>/:
+          #  - pierwsze wyrazenia lapia sciezki tuz po cudzyslowie / "=" / "("
+          #  - kolejne: URL-e wielolinijkowego srcset, ktore zaczynaja wlasna linie
+          #  - linki do podstron dostaja UKOSNIK NA KONCU, bo GitHub Pages serwuje
+          #    je jako katalogi i bez niego odpowiada 301 przy kazdym przejsciu.
+          #    W zrodlach ukosnika nie ma celowo: drmonikabazgier.pl zachowuje sie
+          #    odwrotnie (/o-mnie -> 200, /o-mnie/ -> 301), wiec ta zmiana moze
+          #    istniec wylacznie w buildzie dla GitHub Pages.
+          rewrite="s#href=\"/\"#href=\"/${repo}/\"#g"
+          rewrite="$rewrite; s#href='/'#href='/${repo}/'#g"
+          rewrite="$rewrite; s#\([\"'=(]\)/assets/#\1/${repo}/assets/#g"
+          rewrite="$rewrite; s#^\([[:space:]]*\)/assets/#\1/${repo}/assets/#g"
+          for page in "${pages[@]}"; do
+            rewrite="$rewrite; s#\([\"'=(]\)/${page}#\1/${repo}/${page}/#g"
+          done
+
+          find _site -type f \
+            \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.xml' \) \
+            -exec sed -i "$rewrite" {} +
+
+          # Podglad na *.github.io nie moze konkurowac w wynikach z wlasciwa
+          # domena. Dopoki nie ma CNAME, kazda podstrona dostaje noindex.
+          # Crawl zostaje dozwolony (robots.txt bez zmian) — inaczej robot nie
+          # zobaczylby tej dyrektywy. Po dodaniu CNAME warunek sam sie wylacza.
+          if [ ! -f CNAME ]; then
+            find _site -type f -name '*.html' -exec sed -i \
+              's#name="robots" content="index,follow"#name="robots" content="noindex,follow"#g' {} +
+          fi
+
           touch _site/.nojekyll
 
       - name: Upload Pages artifact
