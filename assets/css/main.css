@@ -307,6 +307,20 @@ picture {
   background: var(--ink);
 }
 
+/* Główne wezwanie do działania — wypełniony wariant, żeby odróżniał się od
+   akcji drugorzędnych. Na hover zamienia się miejscami z .btn--outline. */
+.btn--solid {
+  color: var(--cream);
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.btn--solid:hover,
+.btn--solid:focus-visible {
+  color: var(--ink);
+  background: transparent;
+}
+
 /* ---------- Skip link ---------- */
 .skip-link {
   position: fixed;
@@ -459,11 +473,11 @@ picture {
   font-size: 0.96rem;
   letter-spacing: 0.04em;
   text-decoration: none;
-  color: var(--ink);
   border-radius: 4px;
 }
 
 .site-nav a:not(.btn) {
+  color: var(--ink);
   border: 1px solid var(--ink);
   transition:
     background-color 0.25s ease,
@@ -1375,7 +1389,7 @@ picture {
 }
 
 .location-card__map-link:focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--ink);
   outline-offset: -3px;
 }
 
