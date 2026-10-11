@@ -5,8 +5,62 @@
     var menuButton = document.querySelector("[data-menu-button]");
     var nav = document.querySelector("[data-nav]");
 
+    // Rozwijane "Umów wizytę" opiera się na <details>, więc otwieranie,
+    // obsługa klawiatury i stan działają bez JavaScriptu. Poniżej dokładamy
+    // wyłącznie to, czego <details> nie robi samo: zamknięcie klawiszem
+    // Escape oraz kliknięciem poza obszarem.
+    var booking = document.querySelector("[data-booking]");
+    var bookingSummary = booking ? booking.querySelector("summary") : null;
+
+    // Poniżej 900 px rezerwacja nie jest rozwijanym przyciskiem, tylko
+    // etykietą z dwoma przyciskami pod spodem — w rozwiniętym menu mobilnym
+    // kolejne rozwijanie byłoby zbędnym krokiem. <details> zostaje wtedy
+    // trwale otwarty; samym CSS-em nie da się tego wymusić, bo przeglądarka
+    // ukrywa zawartość poza zasięgiem autorskich reguł.
+    var bookingInline = window.matchMedia("(max-width: 899.98px)");
+
+    var syncBooking = function () {
+      if (!booking) return;
+      if (bookingInline.matches) booking.setAttribute("open", "");
+      else booking.removeAttribute("open");
+    };
+
+    // Zwraca true, jeśli coś faktycznie zamknięto — dzięki temu Escape
+    // zamyka najpierw rozwiniętą listę, a dopiero potem całe menu mobilne.
+    // Na mobile nie ma czego zamykać, więc od razu oddaje false.
+    var closeBooking = function () {
+      if (!booking || bookingInline.matches) return false;
+      if (!booking.hasAttribute("open")) return false;
+      booking.removeAttribute("open");
+      return true;
+    };
+
+    if (booking) {
+      syncBooking();
+      if (bookingInline.addEventListener) {
+        bookingInline.addEventListener("change", syncBooking);
+      } else if (bookingInline.addListener) {
+        bookingInline.addListener(syncBooking);
+      }
+
+      // Dotknięcie etykiety nie może zwinąć listy na wąskim ekranie.
+      booking.addEventListener("toggle", function () {
+        if (bookingInline.matches && !booking.hasAttribute("open")) {
+          booking.setAttribute("open", "");
+        }
+      });
+    }
+
+    document.addEventListener("click", function (event) {
+      if (!booking || bookingInline.matches) return;
+      if (!booking.hasAttribute("open")) return;
+      if (booking.contains(event.target)) return;
+      closeBooking();
+    });
+
     if (menuButton && nav) {
       var closeMenu = function () {
+        closeBooking();
         nav.classList.remove("is-open");
         menuButton.setAttribute("aria-expanded", "false");
         menuButton.setAttribute("aria-label", "Otwórz menu");
@@ -29,8 +83,15 @@
 
       // Escape zamyka menu i przywraca fokus na przycisk; klik poza panelem
       // również je zamyka — standardowe zachowanie rozwijanego menu.
+      // Gdy rozwinięte jest "Umów wizytę", Escape zamyka najpierw tę listę,
+      // a dopiero kolejne naciśnięcie całe menu.
       document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape" && nav.classList.contains("is-open")) {
+        if (event.key !== "Escape") return;
+        if (closeBooking()) {
+          if (bookingSummary) bookingSummary.focus();
+          return;
+        }
+        if (nav.classList.contains("is-open")) {
           closeMenu();
           menuButton.focus();
         }

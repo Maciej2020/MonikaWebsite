@@ -50,8 +50,8 @@
       name="twitter:image"
       content="https://drmonikabazgier.pl/assets/images/og/og-image.jpg"
     />
-    <link rel="stylesheet" href="/assets/css/fonts.css?v=2026-10-05-7" />
-    <link rel="stylesheet" href="/assets/css/main.css?v=2026-10-05-7" />
+    <link rel="stylesheet" href="/assets/css/fonts.css?v=2026-10-11-7" />
+    <link rel="stylesheet" href="/assets/css/main.css?v=2026-10-11-7" />
 
     <script type="speculationrules">
       {
@@ -157,9 +157,25 @@
         <a href="/o-mnie" data-navlink>O mnie</a>
         <a href="/zabiegi" data-navlink>Zabiegi i konsultacje</a>
         <a href="/galeria" data-navlink>Galeria</a>
-        <a class="btn btn--solid nav__cta" href="/umow-wizyte" data-navlink
-          >Umów wizytę</a
-        >
+        <details class="nav__booking" data-booking>
+          <summary class="btn btn--solid nav__cta nav__cta-toggle">
+            Umów wizytę
+          </summary>
+          <div class="nav__booking-menu">
+            <a
+              href="/umow-wizyte/medycyna-estetyczna"
+              data-navlink
+              aria-label="Umów wizytę - medycyna estetyczna"
+              >Medycyna estetyczna</a
+            >
+            <a
+              href="/umow-wizyte/diabetologia"
+              data-navlink
+              aria-label="Umów wizytę - Leczenie Otyłości / Diabetologia"
+              >Leczenie Otyłości / Diabetologia</a
+            >
+          </div>
+        </details>
       </nav>
     </header>
 
@@ -184,7 +200,20 @@
           <p class="hero__tagline">Holistyczne podejście do anti-aging</p>
           <p class="hero__locations">Kraków · Dębica · Bochnia</p>
           <div class="hero__actions">
-            <a class="btn btn--solid" href="/umow-wizyte">Umów wizytę</a>
+            <a
+              class="btn btn--solid btn--stacked"
+              href="/umow-wizyte/medycyna-estetyczna"
+            >
+              <span>Umów wizytę</span>
+              <span>Medycyna Estetyczna</span>
+            </a>
+            <a
+              class="btn btn--solid btn--stacked"
+              href="/umow-wizyte/diabetologia"
+            >
+              <span>Umów wizytę</span>
+              <span>Leczenie Otyłości / Diabetologia</span>
+            </a>
             <a class="btn btn--outline" href="/zabiegi">Zobacz zabiegi</a>
           </div>
         </div>
@@ -267,8 +296,11 @@
               pośpiech. Poznaj moje podejście. To zajmie chwilę, a wiele
               wyjaśni.
             </p>
-            <a class="btn btn--outline" href="/o-mnie">Poznaj podejście</a>
           </div>
+        </div>
+
+        <div class="container hero__actions">
+          <a class="btn btn--outline" href="/o-mnie">Poznaj podejście</a>
         </div>
       </section>
 
@@ -603,6 +635,6 @@
     </footer>
 
     <script src="/assets/js/vendor/splide-4.1.4.min.js" defer></script>
-    <script src="/assets/js/app.js?v=2026-10-05-7" defer></script>
+    <script src="/assets/js/app.js?v=2026-10-11-7" defer></script>
   </body>
 </html>

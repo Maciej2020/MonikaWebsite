@@ -286,6 +286,41 @@ picture {
   color: var(--muted);
 }
 
+/* Wariant powiększony — na stronach rezerwacji etykieta niesie nazwę
+   specjalizacji i to ona odróżnia te strony od siebie, więc musi być czytelna
+   od razu, a nie ginąć pod nagłówkiem sekcji. Większy stopień pisma znosi
+   część światła międzyliterowego, stąd mniejszy odstęp. Reguła musi stać
+   po .kicker — przy równej specyficzności wygrywa późniejsza. */
+.kicker--lg {
+  margin-bottom: 12px;
+  font-size: clamp(1.26rem, 3.1vw, 1.72rem);
+  line-height: 1.25;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+
+/* Druga linia etykiety — zakres konsultacji. Osobny akapit, nieznacznie
+   mniejszy od linii nadrzędnej. Ujemny margines górny ściąga obie linie
+   w jeden blok: marginesy sąsiadów zbiegają się do 12px + (−8px) = 4px. */
+.kicker--sub {
+  margin-top: -8px;
+  margin-bottom: 14px;
+  font-size: clamp(1rem, 1.5vw, 1.36rem);
+  line-height: 1.25;
+  letter-spacing: 0.07em;
+  color: var(--ink);
+}
+
+/* Na stronach rezerwacji to specjalizacja jest nagłówkiem, a "Gdzie
+   przyjmuję" schodzi do roli podtytułu — odwrotnie niż w reszcie serwisu.
+   Reguła musi stać po .section-head h1 (ta sama specyficzność, wygrywa
+   późniejsza). */
+.section-head--spec h1,
+.section-head--spec h2 {
+  font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+  color: var(--muted);
+}
+
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;
@@ -333,6 +368,15 @@ picture {
 .btn--solid:focus-visible {
   color: var(--ink);
   background: transparent;
+}
+
+/* Przycisk dwuliniowy: czynnosc w pierwszej linii, zakres w drugiej.
+   .btn jest inline-flex, wiec bez zmiany kierunku obie linie staneliby
+   obok siebie zamiast pod soba. */
+.btn--stacked {
+  flex-direction: column;
+  gap: 3px;
+  line-height: 1.3;
 }
 
 /* ---------- Skip link ---------- */
@@ -516,6 +560,126 @@ picture {
   background: var(--ink);
 }
 
+/* ---------- Rozwijane "Umów wizytę" w menu ----------
+   Zbudowane na <details>/<summary>, zeby rozwijanie dzialalo takze bez
+   JavaScriptu i bylo obslugiwane z klawiatury natywnie. JavaScript dokłada
+   tylko zamykanie klawiszem Escape i klikiem poza obszarem. */
+.nav__booking {
+  margin-top: 4px;
+}
+
+/* summary jest domyslnie list-item - zdejmujemy znacznik, zeby zachowywalo
+   sie jak przycisk .btn (display z .btn nadpisuje typ listy). */
+.nav__cta-toggle {
+  list-style: none;
+  cursor: pointer;
+}
+
+.nav__cta-toggle::-webkit-details-marker {
+  display: none;
+}
+
+/* Strzalka stanu - obraca sie po rozwinieciu. */
+/* Strzałka musi być wyraźnie widoczna — to jedyny sygnał, że przycisk się
+   rozwija. Glif „small triangle” rysuje się znacznie mniejszy niż jego pole
+   znaku, stąd mnożnik dużo powyżej 1em. */
+.nav__cta-toggle::after {
+  content: "\25be";
+  margin-left: 10px;
+  font-size: 1.85em;
+  line-height: 0.6;
+  transition: transform 0.25s ease;
+}
+
+.nav__booking[open] .nav__cta-toggle::after {
+  transform: rotate(180deg);
+}
+
+/* Na mobile panel menu jest juz rozwinieta warstwa, wiec lista rozwija sie
+   w miejscu i popycha panel w dol - bez zagniezdzonego pozycjonowania. */
+.nav__booking-menu {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.site-nav .nav__booking-menu a {
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 0.92rem;
+  color: var(--ink);
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+}
+
+.site-nav .nav__booking-menu a:hover,
+.site-nav .nav__booking-menu a:focus-visible {
+  color: var(--cream);
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav__cta-toggle::after {
+    transition: none;
+  }
+}
+
+/* ---------- Rezerwacja w menu mobilnym ----------
+   W menu mobilnym cała nawigacja jest już rozwiniętą warstwą, więc chowanie
+   rezerwacji pod kolejnym rozwijaniem tylko dokłada krok. Zamiast przycisku
+   pokazujemy etykietę, a pod nią od razu oba przyciski specjalizacji.
+   Otwarcie <details> ustawia JavaScript — przeglądarka nie pozwala wymusić
+   tego samym CSS-em (zawartość jest ukrywana poza zasięgiem autorskich reguł).
+   Selektor z [aria-current] jest potrzebny, bo na stronie /umow-wizyte
+   summary niesie ten atrybut i reguła stanu bieżącego nadpisałaby wygląd. */
+@media (max-width: 899.98px) {
+  .site-nav .nav__cta-toggle,
+  .site-nav .nav__cta-toggle[aria-current="page"] {
+    display: block;
+    min-height: 0;
+    margin: 10px 0 8px;
+    padding: 0 2px;
+    background: transparent;
+    border: 0;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-align: left;
+    cursor: default;
+  }
+
+  /* Bez strzałki — etykieta nie jest już przełącznikiem. */
+  .nav__cta-toggle::after {
+    content: none;
+  }
+
+  .nav__booking-menu {
+    gap: 8px;
+    margin-top: 0;
+  }
+
+  /* Oba wejścia w rezerwację mają wagę głównego wezwania do działania. */
+  .site-nav .nav__booking-menu a {
+    justify-content: center;
+    min-height: 50px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .site-nav .nav__booking-menu a:hover,
+  .site-nav .nav__booking-menu a:focus-visible {
+    color: var(--ink);
+    background: transparent;
+  }
+}
+
 /* ---------- Hero (centered) ---------- */
 .hero {
   text-align: center;
@@ -624,10 +788,6 @@ picture {
   margin-top: 16px;
 }
 
-.split__body .btn {
-  margin-top: 26px;
-}
-
 /* About subsections (o mnie) */
 .about-points {
   margin-top: 28px;
@@ -690,6 +850,71 @@ picture {
 
 .offer li {
   margin: 6px 0;
+}
+
+/* Kafelek oferty prowadzacy do osobnej podstrony zabiegu. Padding przenosimy
+   z karty na link, zeby klikalny i focusowalny byl caly kafelek, a nie tylko
+   obszar tekstu. Reakcja na najechanie jest ta sama co w .location-card. */
+.offer--link {
+  padding: 0;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.offer__link {
+  display: block;
+  padding: 28px 26px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.offer--link:hover {
+  border-color: var(--line);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.offer__link:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: -3px;
+}
+
+/* Strzalka po tytule sygnalizuje przejscie dalej - jedyny wskaznik
+   klikalnosci dostepny na urzadzeniach dotykowych, gdzie nie ma hover. */
+.offer__link h3::after {
+  content: "\2192";
+  margin-left: 10px;
+  font-size: 0.92em;
+  color: var(--muted);
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
+  display: inline-block;
+}
+
+.offer--link:hover .offer__link h3::after,
+.offer__link:focus-visible h3::after {
+  color: var(--ink);
+  transform: translateX(4px);
+}
+
+/* Uzytkownicy z ustawieniem ograniczenia ruchu nie dostaja przesuniec. */
+@media (prefers-reduced-motion: reduce) {
+  .offer--link,
+  .offer__link h3::after {
+    transition: none;
+  }
+
+  .offer--link:hover {
+    transform: none;
+  }
+
+  .offer--link:hover .offer__link h3::after,
+  .offer__link:focus-visible h3::after {
+    transform: none;
+  }
 }
 
 /* ---------- Galeria ---------- */
@@ -1429,6 +1654,34 @@ picture {
   line-height: 1.3;
 }
 
+/* Telefon do placowki. align-self: start zwęża obszar klikalny do samego
+   numeru - w kolumnie flex link rozciagnalby sie na cala szerokosc karty. */
+.location-card__phone {
+  align-self: start;
+  margin-top: 2px;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.location-card__phone:hover,
+.location-card__phone:focus-visible {
+  color: var(--muted);
+  border-color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .location-card__phone {
+    transition: none;
+  }
+}
+
 /* Lokalny, statyczny podgląd mapy. Obraz nie łączy się z Google podczas
    ładowania strony; dopiero kliknięcie otwiera wskazany adres w Google Maps. */
 .location-card__map {
@@ -1640,6 +1893,64 @@ picture {
   .locations-groups > .locations-group:not(:first-child) .locations {
     grid-template-columns: 1fr;
   }
+
+  /* Wariant wyśrodkowany — dla strony, która ma mniej placówek niż cztery
+     w rzędzie (diabetologia: 2 + 1 + 1). Zamiast czterech kolumn ułamkowych
+     dajemy dwie o szerokości dokładnie takiej jak kolumna układu
+     czterokolumnowego, czyli (100% − 3 odstępy) / 4. Siatka jest wtedy węższa
+     od kontenera, więc justify-content faktycznie ją centruje, a kafelki
+     zachowują ten sam rozmiar co na stronie estetycznej. */
+  .locations-groups--center {
+    grid-template-columns: repeat(2, calc((100% - 54px) / 4));
+    justify-content: center;
+  }
+
+  .locations-groups--center > .locations-group:first-child .locations {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Uklad dwukolumnowy wymaga realnej szerokosci: ponizej 1100 px prawa
+   kolumna ma okolo 320 px tresci, czyli mniej niz pojedynczy kafelek,
+   a naglowki lamia sie inaczej w kazdej kolumnie i podtytuly przestaja
+   byc wyrownane. Wezsze ekrany dostaja sekcje jedna pod druga. */
+@media (min-width: 1100px) {
+  /* ---------- Wizyty stacjonarne i zdalne obok siebie ----------
+     Obie sekcje stają się kolumnami jednej siatki. Pasy zachowują własne
+     tła, więc podział czyta się jako dwie kontrastujące kolumny. Kolumna
+     zdalna jest węższa, bo mieści jedną kartę zamiast czterech. */
+  .booking-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  /* W węższej kolumnie wzór „jedna czwarta szerokości” dałby kafelki ok.
+     200 px, więc wracamy do dwóch równych kolumn wypełniających kolumnę. */
+  .booking-split .locations-groups--center {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+  }
+
+  .booking-split .locations-groups--center > .locations-group:not(:first-child) .locations {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Karta zdalna trzyma się góry i podąża za przewijaniem — bez tego pod
+     spodem zostałby wysoki pas pustego tła. */
+  .booking-split > .band--greige > .container {
+    position: sticky;
+    top: 104px;
+  }
+}
+
+/* Między 560 a 900 px grupy jednokartowe stoją w siatce dwukolumnowej i
+   kafelek ciąży do lewej. Zwężamy kolumnę do szerokości kafelka i centrujemy. */
+@media (min-width: 560px) and (max-width: 899.98px) {
+  .locations-groups--center > .locations-group:not(:first-child) .locations {
+    grid-template-columns: calc((100% - 18px) / 2);
+    justify-content: center;
+  }
 }
 
 /* ---------- Footer ---------- */
@@ -1771,6 +2082,24 @@ picture {
   }
 }
 
+/* Na telefonie panel menu zajmuje całą szerokość między marginesami. Powyżej
+   robi się z tego panel zakotwiczony pod hamburgerem — bez tego ograniczenia
+   przy szerokościach bliskich 1280 px rozciągałby się przez cały ekran, a
+   pozycje menu wisiałyby samotnie przy lewej krawędzi. */
+@media (min-width: 560px) {
+  .site-nav {
+    left: auto;
+    width: min(calc(100% - 32px), 420px);
+  }
+}
+
+/* ---------- Pozioma nawigacja ----------
+   Próg 900 px: menu draftu ma trzy pozycje wraz z sygnaturą i przyciskiem
+   rezerwacji potrzebuje około 1250 px. Poniżej tej szerokości etykiety
+   łamały się w środku pigułek („O / mnie”, „Zabiegi i / konsultacje”),
+   co wyglądało na usterkę. Węższe ekrany dostają menu pod hamburgerem,
+   które mieści wszystko bez kompromisów. Próg jest zdublowany w app.js
+   (stała bookingInline) — zmiana w jednym miejscu wymaga zmiany w drugim. */
 @media (min-width: 900px) {
   .nav-toggle {
     display: none;
@@ -1779,6 +2108,11 @@ picture {
   .site-nav,
   .site-nav.is-open {
     position: static;
+    /* width i left są ustawiane dla panelu pod hamburgerem — tutaj trzeba je
+       wyzerować, inaczej poziome menu zostaje ściśnięte do szerokości panelu
+       i ostatnie pozycje wychodzą poza ekran. */
+    width: auto;
+    left: auto;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -1792,6 +2126,13 @@ picture {
     min-height: 46px;
     padding: 8px 14px;
     background: transparent;
+  }
+
+  /* Etykieta nigdy nie łamie się w środku pigułki — przy dłuższej nazwie
+     menu ma się raczej zagęścić niż rozjechać na dwie linie. */
+  .site-nav a,
+  .nav__cta-toggle {
+    white-space: nowrap;
   }
 
   .site-nav a:not(.btn):hover,
@@ -1809,6 +2150,30 @@ picture {
     min-height: 46px;
   }
 
+  /* Na desktopie lista nie moze rozpychac naglowka, wiec unosi sie nad
+     trescia, zakotwiczona do prawej krawedzi przycisku. */
+  .nav__booking {
+    position: relative;
+    margin-top: 0;
+  }
+
+  .nav__booking-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 1;
+    min-width: 248px;
+    margin-top: 0;
+    padding: 8px;
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+  }
+}
+
+/* Układ treści i stopki nie zależy od nawigacji, więc zostaje przy 900 px. */
+@media (min-width: 900px) {
   .split {
     grid-template-columns: 1fr 1fr;
   }

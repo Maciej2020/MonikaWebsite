@@ -53,8 +53,8 @@
       name="twitter:image"
       content="https://drmonikabazgier.pl/assets/images/og/og-image.jpg"
     />
-    <link rel="stylesheet" href="/assets/css/fonts.css?v=2026-10-05-7" />
-    <link rel="stylesheet" href="/assets/css/main.css?v=2026-10-05-7" />
+    <link rel="stylesheet" href="/assets/css/fonts.css?v=2026-10-11-7" />
+    <link rel="stylesheet" href="/assets/css/main.css?v=2026-10-11-7" />
     <link rel="stylesheet" href="/assets/css/privacy.css?v=2026-08-27-3" />
 
     <script type="speculationrules">
@@ -121,9 +121,25 @@
         <a href="/o-mnie" data-navlink>O mnie</a>
         <a href="/zabiegi" data-navlink>Zabiegi i konsultacje</a>
         <a href="/galeria" data-navlink>Galeria</a>
-        <a class="btn btn--solid nav__cta" href="/umow-wizyte" data-navlink
-          >Umów wizytę</a
-        >
+        <details class="nav__booking" data-booking>
+          <summary class="btn btn--solid nav__cta nav__cta-toggle">
+            Umów wizytę
+          </summary>
+          <div class="nav__booking-menu">
+            <a
+              href="/umow-wizyte/medycyna-estetyczna"
+              data-navlink
+              aria-label="Umów wizytę - medycyna estetyczna"
+              >Medycyna estetyczna</a
+            >
+            <a
+              href="/umow-wizyte/diabetologia"
+              data-navlink
+              aria-label="Umów wizytę - Leczenie Otyłości / Diabetologia"
+              >Leczenie Otyłości / Diabetologia</a
+            >
+          </div>
+        </details>
       </nav>
     </header>
 
@@ -423,6 +439,6 @@
       </p>
     </footer>
 
-    <script src="/assets/js/app.js?v=2026-10-05-7" defer></script>
+    <script src="/assets/js/app.js?v=2026-10-11-7" defer></script>
   </body>
 </html>

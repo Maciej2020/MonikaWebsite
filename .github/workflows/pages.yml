@@ -31,6 +31,10 @@ jobs:
           set -euo pipefail
           repo="${GITHUB_REPOSITORY##*/}"
           pages=(o-mnie zabiegi galeria umow-wizyte polityka-prywatnosci)
+          # Podstrony rezerwacji leza w podkatalogu pages/umow-wizyte/.
+          # Bez wpisania ich tutaj nie trafiaja do artefaktu, a rozwijany
+          # przycisk "Umow wizyte" prowadzi na 404.
+          nested=(umow-wizyte/medycyna-estetyczna umow-wizyte/diabetologia)
 
           mkdir -p _site
           cp -R assets _site/assets
@@ -44,7 +48,7 @@ jobs:
             cp CNAME _site/
           fi
 
-          for page in "${pages[@]}"; do
+          for page in "${pages[@]}" "${nested[@]}"; do
             mkdir -p "_site/$page"
             cp "pages/$page.html" "_site/$page/index.html"
           done
@@ -66,8 +70,11 @@ jobs:
           rewrite="$rewrite; s#href='/'#href='/${repo}/'#g"
           rewrite="$rewrite; s#\([\"'=(]\)/assets/#\1/${repo}/assets/#g"
           rewrite="$rewrite; s#^\([[:space:]]*\)/assets/#\1/${repo}/assets/#g"
-          for page in "${pages[@]}"; do
-            rewrite="$rewrite; s#\([\"'=(]\)/${page}#\1/${repo}/${page}/#g"
+          # Wzorzec konczy sie cudzyslowem lub nawiasem, inaczej regula dla
+          # /umow-wizyte dopasowalaby sie takze do prefiksu adresu
+          # /umow-wizyte/diabetologia i dawala podwojny ukosnik.
+          for page in "${nested[@]}" "${pages[@]}"; do
+            rewrite="$rewrite; s#\(["'=(]\)/${page}\(["')]\)#\1/${repo}/${page}/\2#g"
           done
 
           find _site -type f \
