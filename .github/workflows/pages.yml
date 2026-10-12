@@ -30,7 +30,7 @@ jobs:
         run: |
           set -euo pipefail
           repo="${GITHUB_REPOSITORY##*/}"
-          pages=(o-mnie zabiegi galeria umow-wizyte polityka-prywatnosci)
+          pages=(o-mnie zabiegi galeria polityka-prywatnosci)
           # Podstrony rezerwacji leza w podkatalogu pages/umow-wizyte/.
           # Bez wpisania ich tutaj nie trafiaja do artefaktu, a rozwijany
           # przycisk "Umow wizyte" prowadzi na 404.

@@ -21,8 +21,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://drmonikabazgier.pl/umow-wizyte</loc>
-    <lastmod>2026-10-05</lastmod>
+    <loc>https://drmonikabazgier.pl/umow-wizyte/medycyna-estetyczna</loc>
+    <lastmod>2026-10-12</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://drmonikabazgier.pl/umow-wizyte/diabetologia</loc>
+    <lastmod>2026-10-12</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
